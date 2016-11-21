@@ -1,24 +1,20 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.Joke;
 import com.example.Jokes;
-import com.newwesterndev.jokesandroidlibrary.JokeActivity;
 
 import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    private ArrayList<Joke> jokeList = new ArrayList<>();
+    private ArrayList<String> jokeList = new ArrayList<>();
     Jokes jokes = new Jokes();
-    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +49,8 @@ public class MainActivity extends ActionBarActivity {
 
     public void tellJoke(View view) {
 
-        Intent i = new Intent(this, JokeActivity.class);
-        i.putExtra("jokes", jokeList);
-        startActivity(i);
+        new JokeEndpointsAsync().execute(this);
+
     }
 
 
