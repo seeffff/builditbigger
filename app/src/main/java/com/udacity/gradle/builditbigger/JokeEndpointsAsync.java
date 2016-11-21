@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-class JokeEndpointsAsync extends AsyncTask<Void, Void, ArrayList<String>> {
+public class JokeEndpointsAsync extends AsyncTask<Void, Void, ArrayList<String>> {
     private static JokesApi jokesApi = null;
 
     @Override

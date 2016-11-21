@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.Jokes;
+import com.google.android.gms.ads.AdView;
 import com.newwesterndev.jokesandroidlibrary.JokeActivity;
 
 import java.util.ArrayList;
@@ -23,6 +24,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        boolean isPaid = getResources().getBoolean(R.bool.paid);
+        AdView adView = (AdView) findViewById(R.id.adView);
+
+        if(isPaid){
+            adView.setVisibility(View.GONE);
+        }
 
         jokeList = jokes.getJokes();
     }
