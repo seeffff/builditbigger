@@ -34,13 +34,10 @@ public class MainActivity extends ActionBarActivity {
         adView = (AdView) findViewById(R.id.adView);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
-        if (isPaid) {
-            adView.setVisibility(View.GONE);
-        } else {
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-            requestNewInterstitial();
-        }
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        requestNewInterstitial();
+
 
         jokeList = jokes.getJokes();
     }
@@ -49,40 +46,28 @@ public class MainActivity extends ActionBarActivity {
         final Intent i = new Intent(getApplicationContext(), JokeActivity.class);
         progressBar.setVisibility(View.VISIBLE);
 
-        if (!isPaid) {
-            new JokeEndpointsAsync() {
-                @Override
-                protected void onPostExecute(ArrayList<String> jokeList) {
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.putExtra("jokes", jokeList);
+        new JokeEndpointsAsync() {
+            @Override
+            protected void onPostExecute(ArrayList<String> jokeList) {
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("jokes", jokeList);
 
-                    if (mInterstitialAd.isLoaded()) {
-                        mInterstitialAd.show();
-                    } else {
-                        progressBar.setVisibility(View.GONE);
-                        startActivity(i);
-                    }
-                    mInterstitialAd.setAdListener(new AdListener() {
-                        @Override
-                        public void onAdClosed() {
-                            requestNewInterstitial();
-                            progressBar.setVisibility(View.GONE);
-                            startActivity(i);
-                        }
-                    });
-                }
-            }.execute();
-        } else {
-            new JokeEndpointsAsync() {
-                @Override
-                protected void onPostExecute(ArrayList<String> jokeList) {
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.putExtra("jokes", jokeList);
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
                     progressBar.setVisibility(View.GONE);
                     startActivity(i);
                 }
-            }.execute();
-        }
+                mInterstitialAd.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdClosed() {
+                        requestNewInterstitial();
+                        progressBar.setVisibility(View.GONE);
+                        startActivity(i);
+                    }
+                });
+            }
+        }.execute();
     }
 
     private void requestNewInterstitial() {
